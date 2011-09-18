@@ -5,6 +5,7 @@ function reverse(s){
 exports.shorten = function(id){
 	var base_dict = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var shortened;
+	id = id + 5000
 	if (id==0){
 		return shortened = 0;
 	}else{
@@ -26,7 +27,7 @@ exports.shorten = function(id){
 };
 
 exports.expand = function(code){
-		var base_dict = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	var base_dict = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	var base = 62;
 	var decr = 0;
 	var num = 0;
@@ -41,11 +42,6 @@ exports.expand = function(code){
 		// console.log(index_number) 
 		num  += index_number * (Math.pow(base, exponent))
 		decr += 1
-
 	}
-	 return num
-
-
-
-
+	 return num - 5000
 };

@@ -6,7 +6,7 @@
 var express = require('express')
 var ejs = require('ejs');
 var data = require(__dirname + '/data');
-var shorterner = require(__dirname + '/shortener');
+var shortener = require(__dirname + '/shortener');
 
 var app = module.exports = express.createServer();
 var everyone = require('now').initialize(app);
@@ -49,16 +49,20 @@ app.get('/:link/analyze', function(req,res){
 //When we get a post, take the form data and shorted the link, then return the shortened link
 app.post('/shorten', function(req,res){
 	console.log(req.body.url_field);
+  console.log(req.header('Host'))
+   var code = shortener.shorten(1)
 	
 	res.render('shorten',{
 		linkObject: {
-			short_link:"http://localhost:3000/12jsak3",
+			short_link:"http://localhost:3000/" + code ,
+      // header: req.header()
 		}
 	});
 });
 
 //When somebody goes to a link, log the analytics data and redirect them to the resolved link
 app.get('/:link', function(req, res){
+  res.redirect('http://www.google.com')
 	
 });
 
