@@ -47,7 +47,7 @@ app.get('/:link/analyze', function(req,res){
 
 //When we get a post, take the form data and shorted the link, then return the shortened link
 app.post('/shorten', function(req,res){
-	
+	console.log(req.body.url_field);
 });
 
 //When somebody goes to a link, log the analytics data and redirect them to the resolved link
