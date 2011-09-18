@@ -4,7 +4,8 @@
  */
 
 var express = require('express')
-	, ejs = require('ejs');
+	, ejs = require('ejs')
+	, data = require(__dirname + '/data');
 
 var app = module.exports = express.createServer();
 
