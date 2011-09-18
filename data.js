@@ -14,9 +14,17 @@ redis.on('error', function(err){
 //<link_index>							{short_link, original_link, time_created}
 //<link_index>_analyze			LIST OF: {IP, browser, OS, time, referer}
 
+exports.getAndIncrementCounter = function(callback){
+	redis.incr('counter', function(err, reply){
+		if (err) return callback(err);
+		
+		var counter = parseInt(reply.toString());
+		callback(null, counter);
+	});
+};
 
-exports.saveLink = function(linkIndex, linkObject, callback){
-	redis.set(linkIndex, linkObject);
+exports.saveLink = function(linkIndex, linkObject){
+	redis.set(linkIndex, JSON.stringify(linkObject));
 };
 
 exports.saveLinkHit = function(linkIndex, linkHitObject, callback){
@@ -28,7 +36,8 @@ exports.getLink = function(linkIndex, callback){
 	redis.get(linkIndex, function(err, reply){
 		if (err) return callback(err);
 		
-		var linkObject = JSON.parse(reply.toString());
+		console.log("here is the object: " + reply);
+		var linkObject = JSON.parse(reply);
 		callback(null, linkObject);
 	});
 };
