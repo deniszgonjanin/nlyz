@@ -44,12 +44,21 @@ app.get('/', function(req, res){
 
 //This is the real time analytics dashboard
 app.get('/:link_id/analyze', function(req,res){
-	res.render('dashboard',{
-		linkObject: {
-			short_link:"http://localhost:3000/12jsak3",
-		},
-		server_address: SERVER_ADDRESS
+	
+	var id = shortener.expand(req.params.link_id);
+	
+	data.getLink(id, function(err, value){
+		if (err){
+			
+		} else{
+			res.render('dashboard',{
+				linkObject: value,
+				server_address: SERVER_ADDRESS
+			});
+			//distributeUpdate(SERVER_ADDRESS + value.short_link, "We got a hit!");
+		}
 	});
+	
 });
 
 //When we get a post, take the form data and shorted the link, then return the shortened link
@@ -99,9 +108,10 @@ app.get('/:link_id', function(req, res){
 	
 	data.getLink(id, function(err, value){
 		if (err){
-			console.log('denis like cock')
+			console.log('mahdi hates black people')
 		} else{
 			res.redirect(value.original_link);
+			distributeUpdate(value.short_link, value);
 		}
 	});
 	
@@ -124,5 +134,6 @@ everyone.now.registerForUpdates = function(link, updateCallback){
 };
 
 distributeUpdate = function(linkId, update){
+	console.log('sending update to ' + linkId);
 	nowjs.getGroup(linkId).now.receiveUpdate(update);
 };

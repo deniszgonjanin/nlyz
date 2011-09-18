@@ -10,10 +10,11 @@
 		});
 		
 		now.receiveUpdate = function(update){
+			console.log('we received an update!!!');
 			$("#messages").append("<br>" + update);
 		};
   });
 </script>
 
 <h2> Hi Fags </h2>
-<div id="messages"><br>You're watching link: <%- linkObject.short_link %></div>
+<div id="messages"><br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a></div>
