@@ -14,8 +14,16 @@ redis.on('error', function(err){
 //<link_index>							{short_link, original_link, time_created}
 //<link_index>_analyze			LIST OF: {IP, browser, OS, time, referer}
 
+exports.getAndIncrementCounter = function(callback){
+	redis.incr('counter', function(err, reply){
+		if (err) return callback(err);
+		
+		var counter = parseInt(reply.toString());
+		callback(null, counter);
+	});
+};
 
-exports.saveLink = function(linkIndex, linkObject, callback){
+exports.saveLink = function(linkIndex, linkObject){
 	redis.set(linkIndex, linkObject);
 };
 

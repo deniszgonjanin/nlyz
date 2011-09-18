@@ -55,14 +55,26 @@ app.get('/:link/analyze', function(req,res){
 app.post('/shorten', function(req,res){
 	console.log(req.body.url_field);
   console.log(req.header('Host'))
-   var code = shortener.shorten(1)
-	
-	res.render('shorten',{
-		linkObject: {
-			short_link:"http://localhost:3000/" + code ,
-      // header: req.header()
+  
+	var counter = data.getAndIncrementCounter(function(err, value){
+		if (err){
+			console.log('there was an error when incrementing the counter');
+		} else{
+			var code = shortener.shorten(value);
+			var link_object = {
+				short_link: code, 
+				original_link: req.body.url_field,
+				time_created: new Date()
+			};
+			
+			data.saveLink(value, link_object);
+			
+			res.render('shorten',{
+				linkObject: link_object
+			});
 		}
 	});
+	
 });
 
 //When somebody goes to a link, log the analytics data and redirect them to the resolved link
