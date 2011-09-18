@@ -11,7 +11,7 @@
 		
 		now.receiveUpdate = function(update){
 			console.log('we received an update!!!');
-			$("#messages").append("<br>" + update);
+			$("#messages").append("<br>" + update.time_created+ "<br>" + update.original_link);
 		};
   });
 </script>
