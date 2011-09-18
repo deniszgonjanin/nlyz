@@ -9,7 +9,8 @@ var data = require(__dirname + '/data');
 var shortener = require(__dirname + '/shortener');
 
 var app = module.exports = express.createServer();
-var everyone = require('now').initialize(app);
+var nowjs = require('now');
+var everyone = nowjs.initialize(app);
 
 // Configuration
 
@@ -43,7 +44,11 @@ app.get('/', function(req, res){
 
 //This is the real time analytics dashboard
 app.get('/:link/analyze', function(req,res){
-	res.render('dashboard');
+	res.render('dashboard',{
+		linkObject: {
+			short_link:"http://localhost:3000/12jsak3",
+		}
+	});
 });
 
 //When we get a post, take the form data and shorted the link, then return the shortened link
@@ -68,3 +73,19 @@ app.get('/:link', function(req, res){
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
+everyone.now.logStuff = function(msg){
+	console.log(msg);
+};
+
+everyone.now.registerForUpdates = function(link, updateCallback){
+	this.now.room = link;
+	nowjs.getGroup(this.now.room).addUser(this.user.clientId);
+	console.log('joined: ' + this.now.room);
+	
+	updateCallback("Hello Bitch");
+};
+
+distributeUpdate = function(linkId, update){
+	nowjs.getGroup(linkId).now.receiveUpdate(update);
+};
