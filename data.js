@@ -24,7 +24,7 @@ exports.getAndIncrementCounter = function(callback){
 };
 
 exports.saveLink = function(linkIndex, linkObject){
-	redis.set(linkIndex, linkObject);
+	redis.set(linkIndex, JSON.stringify(linkObject));
 };
 
 exports.saveLinkHit = function(linkIndex, linkHitObject, callback){
@@ -36,7 +36,8 @@ exports.getLink = function(linkIndex, callback){
 	redis.get(linkIndex, function(err, reply){
 		if (err) return callback(err);
 		
-		var linkObject = JSON.parse(reply.toString());
+		console.log("here is the object: " + reply);
+		var linkObject = JSON.parse(reply);
 		callback(null, linkObject);
 	});
 };

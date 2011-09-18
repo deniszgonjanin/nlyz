@@ -37,13 +37,11 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', function(req, res){
-  res.render('index', {
-    title: 'Express'
-  });
+  res.render('index');
 });
 
 //This is the real time analytics dashboard
-app.get('/:link/analyze', function(req,res){
+app.get('/:link_id/analyze', function(req,res){
 	res.render('dashboard',{
 		linkObject: {
 			short_link:"http://localhost:3000/12jsak3",
@@ -78,8 +76,22 @@ app.post('/shorten', function(req,res){
 });
 
 //When somebody goes to a link, log the analytics data and redirect them to the resolved link
-app.get('/:link', function(req, res){
-  res.redirect('http://www.google.com')
+app.get('/:link_id', function(req, res){
+	if (req.params.link_id == "favicon.ico"){
+		res.render('index');
+		return;
+	}
+	
+	console.log("Getting link: " + req.params.link_id);
+	var id = shortener.expand(req.params.link_id);
+	
+	data.getLink(id, function(err, value){
+		if (err){
+			
+		} else{
+			res.redirect(value.original_link);
+		}
+	});
 	
 });
 
