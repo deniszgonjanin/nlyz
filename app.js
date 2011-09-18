@@ -3,6 +3,8 @@
  * Module dependencies.
  */
 
+var SERVER_ADDRESS = "http://localhost:3000/";
+
 var express = require('express')
 var ejs = require('ejs');
 var data = require(__dirname + '/data');
@@ -45,7 +47,8 @@ app.get('/:link_id/analyze', function(req,res){
 	res.render('dashboard',{
 		linkObject: {
 			short_link:"http://localhost:3000/12jsak3",
-		}
+		},
+		server_address: SERVER_ADDRESS
 	});
 });
 
@@ -71,7 +74,8 @@ app.post('/shorten', function(req,res){
 			res.render('shorten',{
 				linkObject: link_object, 
         header: JSON.stringify(req.headers),
-        remote_address: req.connection.remoteAddress
+        remote_address: req.connection.remoteAddress,
+				server_address: SERVER_ADDRESS
 			});
 		}
 	});
@@ -105,6 +109,7 @@ app.get('/:link_id', function(req, res){
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log(app.address());
 
 everyone.now.logStuff = function(msg){
 	console.log(msg);
