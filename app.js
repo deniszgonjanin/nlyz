@@ -54,15 +54,21 @@ app.get('/:link/analyze', function(req,res){
 //When we get a post, take the form data and shorted the link, then return the shortened link
 app.post('/shorten', function(req,res){
 	console.log(req.body.url_field);
-  console.log(req.header('Host'))
+  console.log(JSON.stringify(req.headers));
    var code = shortener.shorten(1)
 	
 	res.render('shorten',{
 		linkObject: {
 			short_link:"http://localhost:3000/" + code ,
-      // header: req.header()
+      header: JSON.stringify(req.headers),
+      remote_address: req.connection.remoteAddress
 		}
 	});
+});
+
+app.get('/shorten', function(req, res){
+  console.log(req.headers)
+  res.redirect('/');
 });
 
 //When somebody goes to a link, log the analytics data and redirect them to the resolved link
