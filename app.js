@@ -41,12 +41,8 @@ app.get('/', function(req, res){
 });
 
 //This is the real time analytics dashboard
-app.get('/analyze/:link?', function(req,res){
-	if (req.params.link){
-		
-	} else{
-		res.redirect('/');
-	}
+app.get('/:link/analyze', function(req,res){
+	res.render('dashboard');
 });
 
 //When we get a post, take the form data and shorted the link, then return the shortened link
