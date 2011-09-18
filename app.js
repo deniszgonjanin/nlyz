@@ -36,5 +36,24 @@ app.get('/', function(req, res){
   });
 });
 
+//This is the real time analytics dashboard
+app.get('/analyze/:link?', function(req,res){
+	if (req.params.link){
+		
+	} else{
+		res.redirect('/');
+	}
+});
+
+//When we get a post, take the form data and shorted the link, then return the shortened link
+app.post('/shorten', function(req,res){
+	
+});
+
+//When somebody goes to a link, log the analytics data and redirect them to the resolved link
+app.get('/:link', function(req, res){
+	
+});
+
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
