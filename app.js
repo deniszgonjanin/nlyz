@@ -49,13 +49,15 @@ app.get('/:link_id/analyze', function(req,res){
 	
 	data.getLink(id, function(err, value){
 		if (err){
-			
+			console.log('There was an ERROR retrieving the link from redis');
 		} else{
-			res.render('dashboard',{
-				linkObject: value,
-				server_address: SERVER_ADDRESS
+			//Get the analytics data for this link
+			data.getLinkAnalytics(id, function(err, value){
+				res.render('dashboard',{
+					linkAnalytics: value,
+					server_address: SERVER_ADDRESS
+				});
 			});
-			//distributeUpdate(SERVER_ADDRESS + value.short_link, "We got a hit!");
 		}
 	});
 	
@@ -64,7 +66,6 @@ app.get('/:link_id/analyze', function(req,res){
 //When we get a post, take the form data and shorted the link, then return the shortened link
 app.post('/shorten', function(req,res){
 	console.log(req.body.url_field);
-  console.log(JSON.stringify(req.headers));
   var code = shortener.shorten(1)
 
 	var counter = data.getAndIncrementCounter(function(err, value){
@@ -103,6 +104,8 @@ app.get('/:link_id', function(req, res){
 		return;
 	}
 	
+	console.log(JSON.stringify(req.headers));
+	
 	console.log("Getting link: " + req.params.link_id);
 	var id = shortener.expand(req.params.link_id);
 	
@@ -110,7 +113,21 @@ app.get('/:link_id', function(req, res){
 		if (err){
 			console.log('mahdi hates black people')
 		} else{
+			//Redirect the user to the original 'unshortened' link. 
+			//Do it first, so the user doesn't have to wait
 			res.redirect(value.original_link);
+			
+			//Build the analytics object for this hit
+			var linkHitObject = {
+				IP: req.headers.origin,
+				browser: req.headers.user-agent,
+				OS: req.headers.user-agent, //Need to parse out browser\OS from user-agent
+				time: new Date(),
+				referer: req.headers.referer,
+			};
+			//Store the hit object into redis, to keep track of hits and analytics
+			data.saveLinkHit(id, linkHitObject);
+			//Push the hit to every Dashboard page that's currently open on this particular link
 			distributeUpdate(value.short_link, value);
 		}
 	});
@@ -119,8 +136,10 @@ app.get('/:link_id', function(req, res){
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-console.log(app.address());
 
+/** Bellow is real time dashboard stuff **/
+
+//Logging function for the websockets real-time clients
 everyone.now.logStuff = function(msg){
 	console.log(msg);
 };
@@ -128,12 +147,12 @@ everyone.now.logStuff = function(msg){
 everyone.now.registerForUpdates = function(link, updateCallback){
 	this.now.room = link;
 	nowjs.getGroup(this.now.room).addUser(this.user.clientId);
-	console.log('joined: ' + this.now.room);
+	console.log('Registered Dashboard client for: ' + this.now.room);
 	
-	updateCallback("Hello Bitch");
+	updateCallback(link);
 };
 
 distributeUpdate = function(linkId, update){
-	console.log('sending update to ' + linkId);
+	console.log('Sending update to dashboards for: ' + linkId);
 	nowjs.getGroup(linkId).now.receiveUpdate(update);
 };

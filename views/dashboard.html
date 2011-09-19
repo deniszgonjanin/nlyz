@@ -1,12 +1,9 @@
 <script type="text/javascript">
   now.ready(function(){
-    // "Hello World!" will print on server
-    now.logStuff("Hello World!");
-
 		var linkId = "<%- linkObject.short_link %>";
 		
 		now.registerForUpdates(linkId, function(update){
-			console.log('got update: ' + update);
+			console.log('Dashboard client connected for: ' + update);
 		});
 		
 		now.receiveUpdate = function(update){
@@ -16,5 +13,5 @@
   });
 </script>
 
-<h2> Hi Fags </h2>
+<h2> Dashboard </h2>
 <div id="messages"><br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a></div>
