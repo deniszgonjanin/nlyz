@@ -14,4 +14,8 @@
 </script>
 
 <h2> Dashboard </h2>
-<div id="messages"><br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a></div>
+<div id="messages">
+	<br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a>
+	
+	<%- partial('hit', hits) %>
+</div>

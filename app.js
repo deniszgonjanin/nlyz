@@ -47,16 +47,22 @@ app.get('/:link_id/analyze', function(req,res){
 	
 	var id = shortener.expand(req.params.link_id);
 	
-	data.getLink(id, function(err, value){
+	data.getLink(id, function(err, link_object){
 		if (err){
 			console.log('There was an ERROR retrieving the link from redis');
 		} else{
 			//Get the analytics data for this link
-			data.getLinkAnalytics(id, function(err, value){
-				res.render('dashboard',{
-					linkAnalytics: value,
-					server_address: SERVER_ADDRESS
-				});
+			data.getLinkAnalytics(id, function(err, link_analytics){
+				if (err){
+					console.log('ERROR getting bulk analytics');
+					res.redirect('404');
+				} else{
+					res.render('dashboard',{
+						hits: link_analytics,
+						linkObject: link_object,
+						server_address: SERVER_ADDRESS
+					});
+				}
 			});
 		}
 	});
@@ -120,8 +126,8 @@ app.get('/:link_id', function(req, res){
 			//Build the analytics object for this hit
 			var linkHitObject = {
 				IP: req.headers.origin,
-				browser: req.headers.user-agent,
-				OS: req.headers.user-agent, //Need to parse out browser\OS from user-agent
+				browser: req.headers["user-agent"],
+				OS: req.headers["user-agent"], //Need to parse out browser\OS from user-agent
 				time: new Date(),
 				referer: req.headers.referer,
 			};

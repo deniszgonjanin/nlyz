@@ -48,8 +48,16 @@ exports.getLinkAnalytics = function(linkIndex, callback){
 		var length = parseInt(reply.toString());
 		
 		redis.lrange(analyzeKey, 0, length, function(err, reply){
-			console.log('analytics reply: ' + reply)
-			var list = reply;
+			console.log('analytics reply: ' + reply);
+			
+			var list = [];
+			var i = 0;
+			for (hit in reply){
+				list[i] = JSON.parse(hit);
+				i = i + 1;
+			}
+			
+			callback(null, list);
 		});
 	});
 };
