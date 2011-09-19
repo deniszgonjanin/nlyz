@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var SERVER_ADDRESS = "http://localhost:3000/";
+var SERVER_ADDRESS = "http://localhost:3012/";
 
 var express = require('express')
 var ejs = require('ejs');
@@ -11,8 +11,6 @@ var data = require(__dirname + '/data');
 var shortener = require(__dirname + '/shortener');
 
 var app = module.exports = express.createServer();
-var nowjs = require('now');
-var everyone = nowjs.initialize(app);
 
 // Configuration
 
@@ -36,6 +34,10 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
+
+app.listen(80);
+var nowjs = require('now');
+var everyone = nowjs.initialize(app);
 
 // Routes
 
@@ -141,7 +143,6 @@ app.get('/:link_id', function(req, res){
 	
 });
 
-app.listen(80);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 /** Bellow is real time dashboard stuff **/
