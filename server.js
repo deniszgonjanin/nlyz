@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var SERVER_ADDRESS = "http://localhost:3012/";
+var SERVER_ADDRESS = "http://nlyz.no.de/";
 
 var express = require('express')
 var ejs = require('ejs');
