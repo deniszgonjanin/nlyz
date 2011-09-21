@@ -36,7 +36,7 @@ exports.getLink = function(linkIndex, callback){
 	redis.get(linkIndex, function(err, reply){
 		if (err) return callback(err);
 		
-		console.log("here is the object: " + reply);
+		//console.log("here is the object: " + reply);
 		var linkObject = JSON.parse(reply);
 		callback(null, linkObject);
 	});
@@ -45,8 +45,8 @@ exports.getLink = function(linkIndex, callback){
 exports.getLinkAnalytics = function(linkIndex, callback){
 	var analyzeKey = linkIndex + '_analyze';
 	redis.llen(analyzeKey, function(err, reply){
-		var length = parseInt(reply.toString());
 		
+		var length = parseInt(reply.toString());
 		redis.lrange(analyzeKey, 0, length, function(err, reply){
 			//console.log(require('util').inspect(reply, true, 2));
 			var list = [];

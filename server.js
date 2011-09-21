@@ -128,16 +128,17 @@ app.get('/:link_id', function(req, res){
 			
 			//Build the analytics object for this hit
 			var linkHitObject = {
-				IP: req.headers.origin,
+				IP: req.headers.host,
 				browser: req.headers["user-agent"],
 				OS: req.headers["user-agent"], //Need to parse out browser\OS from user-agent
 				time: new Date(),
 				referer: req.headers.referer,
 			};
+			
 			//Store the hit object into redis, to keep track of hits and analytics
 			data.saveLinkHit(id, linkHitObject);
 			//Push the hit to every Dashboard page that's currently open on this particular link
-			distributeUpdate(value.short_link, value);
+			distributeUpdate(value.short_link, linkHitObject);
 		}
 	});
 	

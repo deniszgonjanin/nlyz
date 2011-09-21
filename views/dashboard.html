@@ -9,14 +9,16 @@
 		
 		now.receiveUpdate = function(update){
 			console.log('we received an update!!!');
-			$("#messages").append("<br>" + update.time_created+ "<br>" + update.original_link);
+			//$("#messages").append("<li>" + update.time_created+ ". " + update.original_link);
+			
+			$("#messages").append("<li><b>From: </b>" + update.referer + " <b>Time: </b>" + update.time + " <b>IP: </b>" + update.IP + "<br> <b>User Agent:</b>" + update.browser + "</li>");
 		};
   });
 </script>
 
 <h2> Dashboard </h2>
-<div id="messages">
-	<br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a>
-	
+<br>You're watching link: <a href="/<%- linkObject.short_link %>"><%- server_address %><%- linkObject.short_link %></a>
+
+<ul id="messages">
 	<%- partial('hit', hits) %>
-</div>
+</ul>
