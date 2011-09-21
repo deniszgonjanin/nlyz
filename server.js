@@ -35,7 +35,7 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-app.listen(80);
+app.listen(3000);
 var nowjs = require('now');
 var everyone = nowjs.initialize(app);
 

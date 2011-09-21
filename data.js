@@ -29,7 +29,7 @@ exports.saveLink = function(linkIndex, linkObject){
 
 exports.saveLinkHit = function(linkIndex, linkHitObject, callback){
 	var analyzeKey = linkIndex + "_analyze";
-	redis.lpush(analyzeKey, linkHitObject);
+	redis.lpush(analyzeKey, JSON.stringify(linkHitObject));
 };
 
 exports.getLink = function(linkIndex, callback){
@@ -48,13 +48,10 @@ exports.getLinkAnalytics = function(linkIndex, callback){
 		var length = parseInt(reply.toString());
 		
 		redis.lrange(analyzeKey, 0, length, function(err, reply){
-			console.log('analytics reply: ' + reply);
-			
+			//console.log(require('util').inspect(reply, true, 2));
 			var list = [];
-			var i = 0;
 			for (hit in reply){
-				list[i] = JSON.parse(hit);
-				i = i + 1;
+				list[hit] = JSON.parse(reply[hit]);
 			}
 			
 			callback(null, list);
