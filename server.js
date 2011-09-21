@@ -9,6 +9,7 @@ var express = require('express')
 var ejs = require('ejs');
 var data = require(__dirname + '/data');
 var shortener = require(__dirname + '/shortener');
+var geolocate = require(__dirname + '/geolocate');
 
 var app = module.exports = express.createServer();
 
@@ -35,7 +36,7 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
-app.listen(80);
+app.listen(3000);
 var nowjs = require('now');
 var everyone = nowjs.initialize(app);
 
