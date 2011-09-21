@@ -120,7 +120,7 @@ app.get('/:link_id', function(req, res){
 	
 	data.getLink(id, function(err, value){
 		if (err){
-			console.log('mahdi hates black people')
+			console.log('there was an error getting the link from redis')
 		} else{
 			//Redirect the user to the original 'unshortened' link. 
 			//Do it first, so the user doesn't have to wait
