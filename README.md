@@ -1,3 +1,6 @@
+Weekend project.
+Link Shortener with real-time analytics using websockets
+
 requires:
 -----------
 node@0.4.12
